@@ -1,12 +1,24 @@
+import unittest
 import librosa
 from PIL import Image
 
-y, sr = librosa.load("music.wav")
+class TestAudioToImageConversion(unittest.TestCase):
 
-melFrequencyCepstralCoefficients = librosa.feature.mfcc(y=y, sr=sr)
+    def test_conversion(self):
+        y, sr = librosa.load("music.wav")
 
-melFrequencyCepstralCoefficientsNormalized = librosa.util.normalize(melFrequencyCepstralCoefficients)
+        melFrequencyCepstralCoefficients = librosa.feature.mfcc(y=y, sr=sr)
 
-grayScaleImage = Image.fromarray(melFrequencyCepstralCoefficientsNormalized, 'L')
+        melFrequencyCepstralCoefficients = librosa.util.normalize(melFrequencyCepstralCoefficients)
 
-grayScaleImage.save("music.png")
+        image = Image.fromarray(melFrequencyCepstralCoefficients, 'RGB')
+
+        self.assertIsNotNone(image)
+
+        self.assertEqual(image.size[0], melFrequencyCepstralCoefficients.shape[1])
+        self.assertEqual(image.size[1], melFrequencyCepstralCoefficients.shape[0])
+
+        image.save("audioToImage.png")
+
+if __name__ == '__main__':
+    unittest.main()
