@@ -16,5 +16,5 @@ pip install tqdm
 ## Usage
 
 ```sh
-python index.py
+python imageToAudio.py
 ```
